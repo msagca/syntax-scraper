@@ -33,13 +33,16 @@ def main():
 						if bold_text:
 							annex_text += "'" + bold_text + "'"
 							bold_text = ''
-						annex_text += cc['text']
+						if not cc['non_stroking_color']:
+							annex_text += cc['text']
 					elif cc['fontname'] == 'BVXWSQ+CourierNew,Bold':
 						if not cc['text'].isspace():
 							if bold_text in ('[', ']', '(', ')', '{', '}') or cc['text'] in ('[', ']', '(', ')', '{', '}'):
 								if bold_text:
 									annex_text += "'" + bold_text + "'"
 									bold_text = ''
+							if cc['text'] in ("'", '\\'):
+								bold_text += '\\'
 							bold_text += cc['text']
 						elif bold_text:
 							annex_text += "'" + bold_text + "'"
@@ -54,14 +57,17 @@ def main():
 	lexer_obj = ieeeAnnexLexer(input_stream)
 	token_stream = antlr4.CommonTokenStream(lexer_obj)
 	token_stream.fill()
+	#for tt in token_stream.tokens:
+	#	print(tt)
 	parser_obj = ieeeAnnexParser(token_stream)
 	tree_obj = parser_obj.formal_syntax()
 	listener_obj = ieeeAnnexListenerChild(name=args.n)
 	walker_obj = antlr4.ParseTreeWalker();
 	walker_obj.walk(listener_obj, tree_obj)
-	fp = open(f'{args.n}.g4', 'w')
-	fp.write(listener_obj.grammar_definition)
-	fp.close()
+	if listener_obj.grammar_definition:
+		fp = open(f'{args.n}.g4', 'w')
+		fp.write(listener_obj.grammar_definition)
+		fp.close()
 
 if __name__ == '__main__':
 	main()
