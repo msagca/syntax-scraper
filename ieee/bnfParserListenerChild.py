@@ -10,28 +10,73 @@ else:
 
 class bnfParserListenerChild(bnfParserListener):
 
-	def __init__(self, name:str):
+	def __init__(self, grammar_name:str, grammar_type:str):
 		super().__init__()
-		self.name = name
+		self.grammar_name = grammar_name
+		self.grammar_type = grammar_type
 		self.rule_tokens = []
 		self.alt_stack = []
-		self.grammar_definition = ''
+		self.lexer_rule = True
+		self.parser_rules = {}
+		self.lexer_rules = {}
+		self.lexer_tokens = set()
+		self.lexer_rule_tokens = set()
+		self.parser_grammar = ''
+		self.lexer_grammar = ''
+		self.symbols = {'!':'EX', '"':'DQ', '#':'HA', '$':'DO', '%':'MO', '&':'AM', '\'':'AP', '(':'LP', ')':'RP', '*':'AS', '+':'PL', ',':'CO', '-':'MI', '.':'DT', '/':'SL', ':':'CL', ';':'SC', '<':'LT', '=':'EQ', '>':'GT', '?':'QU', '@':'AT', '[':'LB', '\\':'BS', ']':'RB', '^':'CA', '_':'UN', '`':'GR', '{':'LC', '|':'VE', '}':'RC', '~':'TI'}
 
 	def enterFormal_syntax(self, ctx:bnfParser.Formal_syntaxContext):
-		self.grammar_definition += f'grammar {self.name};\n'
+		if self.grammar_type == 'split':
+			self.parser_grammar += f'parser grammar {self.grammar_name}Parser;\n\noptions {{ tokenVocab={self.grammar_name}Lexer; }}\n'
+			self.lexer_grammar += f'lexer grammar {self.grammar_name}Lexer;\n\n'
+		else:
+			self.parser_grammar += f'grammar {self.grammar_name};\n'
+
+	def exitFormal_syntax(self, ctx:bnfParser.Formal_syntaxContext):
+		for rr in self.parser_rules:
+			self.parser_grammar += f'\n{rr}\n\t:'
+			for aa in self.parser_rules[rr]:
+				self.parser_grammar += aa
+			self.parser_grammar += '\n\t;\n'
+		if self.grammar_type == 'split':
+			for tt in self.lexer_tokens:
+				rule_name = ''
+				for cc in tt:
+					if cc.isalpha() or cc == '_':
+						rule_name += cc.upper()
+					elif cc in self.symbols:
+						rule_name += self.symbols[cc]
+					else:
+						rule_name = ''
+						break
+				if rule_name:
+					self.lexer_grammar += f'{rule_name} : \'{tt}\' ;\n'
+			for rr in self.lexer_rules:
+				self.lexer_grammar += f'\n{rr}\n\t:'
+				for aa in self.lexer_rules[rr]:
+					self.lexer_grammar += aa
+				self.lexer_grammar += '\n\t;\n'
 
 	def exitRule_definition(self, ctx:bnfParser.Rule_definitionContext):
 		rule_name = ctx.rule_identifier().getText()
-		rule_alts = ''
-		num_tokens = len(self.rule_tokens)
-		for tt in self.rule_tokens:
-			rule_alts += tt
-		self.grammar_definition += f'\n{rule_name}\n\t:{rule_alts}\n\t;\n'
+		if not self.lexer_rule:
+			self.lexer_tokens.update(self.lexer_rule_tokens)
+		self.lexer_rule_tokens = set()
+		if self.grammar_type == 'split' and self.lexer_rule:
+			self.parser_rules[rule_name] = [' ', rule_name.upper()]
+			self.lexer_rules[rule_name.upper()] = self.rule_tokens
+		else:
+			if self.lexer_rule:
+				self.parser_rules[rule_name] = [' ', rule_name.upper()]
+				rule_name = rule_name.upper()
+			self.parser_rules[rule_name] = self.rule_tokens
 		self.rule_tokens = []
+		self.lexer_rule = True
 
 	def exitSeparator(self, ctx:bnfParser.SeparatorContext):
 		if not self.alt_stack:
-			self.rule_tokens.append('\n\t')
+			self.rule_tokens.append('\n')
+			self.rule_tokens.append('\t')
 		else:
 			self.rule_tokens.append(' ')
 		self.rule_tokens.append('|')
@@ -40,30 +85,40 @@ class bnfParserListenerChild(bnfParserListener):
 		self.alt_stack.append('[')
 		left_index, right_index = ctx.getSourceInterval()
 		if right_index - left_index > 2:
-			self.rule_tokens.append(' (')
+			self.rule_tokens.append(' ')
+			self.rule_tokens.append('(')
 
 	def exitOptional_item(self, ctx:bnfParser.Optional_itemContext):
 		self.alt_stack.pop()
 		left_index, right_index = ctx.getSourceInterval()
 		if right_index - left_index > 2:
-			self.rule_tokens.append(' )')
+			self.rule_tokens.append(' ')
+			self.rule_tokens.append(')')
 		self.rule_tokens.append('?')
 
 	def enterRepeated_item(self, ctx:bnfParser.Repeated_itemContext):
 		self.alt_stack.append('{')
 		left_index, right_index = ctx.getSourceInterval()
 		if right_index - left_index > 2:
-			self.rule_tokens.append(' (')
+			self.rule_tokens.append(' ')
+			self.rule_tokens.append('(')
 
 	def exitRepeated_item(self, ctx:bnfParser.Repeated_itemContext):
 		self.alt_stack.pop()
 		left_index, right_index = ctx.getSourceInterval()
 		if right_index - left_index > 2:
-			self.rule_tokens.append(' )')
+			self.rule_tokens.append(' ')
+			self.rule_tokens.append(')')
 		self.rule_tokens.append('*')
 
 	def enterRule_reference(self, ctx:bnfParser.Rule_referenceContext):
-		self.rule_tokens.append(' ' + ctx.getText())
+		self.rule_tokens.append(' ')
+		self.rule_tokens.append(ctx.getText())
+		self.lexer_rule = False
 
 	def enterKeyword_or_punctuation(self, ctx:bnfParser.Keyword_or_punctuationContext):
-		self.rule_tokens.append(' \'' + ctx.getText() + '\'')
+		self.rule_tokens.append(' ')
+		self.rule_tokens.append('\'')
+		self.rule_tokens.append(ctx.getText())
+		self.rule_tokens.append('\'')
+		self.lexer_rule_tokens.add(ctx.getText())

@@ -14,17 +14,18 @@ else:
 
 def main():
 	arg_parser = argparse.ArgumentParser()
-	arg_parser.add_argument('input', help='IEEE Std 1364/1800-xxxx PDF')
-	arg_parser.add_argument('-n', required=True, metavar='grammar_name', help='Grammar name')
-	arg_parser.add_argument('-s', type=int, required=True, metavar='start_page', help='Annex A start page')
-	arg_parser.add_argument('-e', type=int, required=True, metavar='end_page', help='Annex A end page')
+	arg_parser.add_argument('input_file', help='IEEE language standard (format: PDF)')
+	arg_parser.add_argument('-s', type=int, required=True, metavar='start_page', help='formal syntax start page')
+	arg_parser.add_argument('-e', type=int, required=True, metavar='end_page', help='formal syntax end page')
+	arg_parser.add_argument('-n', required=True, metavar='grammar_name', help='ANTLR4 grammar name')
+	arg_parser.add_argument('-t', choices=['combined', 'split'], default='combined', metavar='grammar_type', help='ANTLR4 grammar type (split or combined)')
 	args = arg_parser.parse_args()
 	annex_text = ''
 	bold_text = ''
 	temp_text = ''
 	reached_start = False
 	reached_end = False
-	with pdfplumber.open(args.input) as pdf:
+	with pdfplumber.open(args.input_file) as pdf:
 		for nn in range(args.s, args.e+1):
 			page = pdf.pages[nn]
 			for cc in page.chars:
@@ -32,13 +33,13 @@ def main():
 					reached_end = True
 					break
 				if reached_start:
-					if cc['fontname'] == 'BHDFJL+TimesNewRomanPSMT':
+					if cc['fontname'] in ('BHDFJL+TimesNewRomanPSMT', 'LHFBMH+TimesNewRoman'):
 						if bold_text:
 							annex_text += '\'' + bold_text + '\''
 							bold_text = ''
 						if not cc['non_stroking_color']:
 							annex_text += cc['text']
-					elif cc['fontname'] == 'BVXWSQ+CourierNew,Bold':
+					elif cc['fontname'] in ('BVXWSQ+CourierNew,Bold', 'LHFBKG+TimesNewRoman,Bold'):
 						if not cc['text'].isspace():
 							if bold_text in ('[', ']', '(', ')', '{', '}') or cc['text'] in ('[', ']', '(', ')', '{', '}'):
 								if bold_text:
@@ -52,24 +53,28 @@ def main():
 							bold_text = ''
 				elif temp_text.find('Source text') != -1:
 					reached_start = True
-				if cc['fontname'] == 'BHDEOM+Arial-BoldMT':
+				if cc['fontname'] in ('BHDEOM+Arial-BoldMT', 'LHFBEG+Arial,Bold'):
 					temp_text += cc['text']
 			if reached_end:
 				break
 	input_stream = antlr4.InputStream(annex_text)
 	lexer_obj = bnfLexer(input_stream)
 	token_stream = antlr4.CommonTokenStream(lexer_obj)
-	#token_stream.fill()
-	#for tt in token_stream.tokens:
-	#	print(tt)
 	parser_obj = bnfParser(token_stream)
 	tree_obj = parser_obj.formal_syntax()
-	listener_obj = bnfParserListenerChild(name=args.n)
+	listener_obj = bnfParserListenerChild(grammar_name=args.n, grammar_type=args.t)
 	walker_obj = antlr4.ParseTreeWalker();
 	walker_obj.walk(listener_obj, tree_obj)
-	if listener_obj.grammar_definition:
+	if args.t == 'split':
+		fp = open(f'{args.n}Parser.g4', 'w')
+		fp.write(listener_obj.parser_grammar)
+		fp.close()
+		fp = open(f'{args.n}Lexer.g4', 'w')
+		fp.write(listener_obj.lexer_grammar)
+		fp.close()
+	else:
 		fp = open(f'{args.n}.g4', 'w')
-		fp.write(listener_obj.grammar_definition)
+		fp.write(listener_obj.parser_grammar)
 		fp.close()
 
 if __name__ == '__main__':
