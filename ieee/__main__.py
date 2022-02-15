@@ -35,28 +35,30 @@ def main():
 		for nn in range(args.s, args.e+1):
 			page = pdf.pages[nn]
 			for cc in page.chars:
-				if cc['fontname'] in ('BHDEOM+Arial-BoldMT', 'LHFBEG+Arial,Bold'):
+				cc_text = cc['text']
+				cc_font = cc['fontname']
+				if cc_font in ('BHDEOM+Arial-BoldMT', 'LHFBEG+Arial,Bold'):
 					if break_next:
 						break
-					title_text += cc['text'].lower()
+					title_text += cc_text.lower()
 				if reached_start:
-					if cc['fontname'] in ('BHDFJL+TimesNewRomanPSMT', 'LHFBMH+TimesNewRoman') or cc['text'].isspace():
+					if cc_font in ('BHDFJL+TimesNewRomanPSMT', 'LHFBMH+TimesNewRoman') or cc_text.isspace():
 						if bold_text:
 							annex_text += '\'' + bold_text + '\''
 							bold_text = ''
 						if not cc['non_stroking_color']:
-							annex_text += cc['text']
-						if reached_end and not break_next and not cc['text'].isspace():
+							annex_text += cc_text
+						if reached_end and not break_next and not cc_text.isspace():
 							break_next = True
-					elif cc['fontname'] in ('BVXWSQ+CourierNew,Bold', 'LHFBKG+TimesNewRoman,Bold'):
-						if not cc['text'].isspace():
-							if bold_text in ('[', ']', '(', ')', '{', '}') or cc['text'] in ('[', ']', '(', ')', '{', '}'):
+					elif cc_font in ('BVXWSQ+CourierNew,Bold', 'LHFBKG+TimesNewRoman,Bold'):
+						if not cc_text.isspace():
+							if bold_text in ('[', ']', '(', ')', '{', '}') or cc_text in ('[', ']', '(', ')', '{', '}'):
 								if bold_text:
 									annex_text += '\'' + bold_text + '\''
 									bold_text = ''
-							if cc['text'] in ('\'', '\\'):
+							if cc_text in ('\'', '\\'):
 								bold_text += '\\'
-							bold_text += cc['text']
+							bold_text += cc_text
 						elif bold_text:
 							annex_text += '\'' + bold_text + '\''
 							bold_text = ''
@@ -90,7 +92,7 @@ def main():
 			fp.write(listener_obj.parser_grammar)
 			fp.close()
 	else:
-		print(f'Error! Could not find the chapter {args.f}.')
+		print(f'Error! Could not find the chapter \'{args.f}\'.')
 		sys.exit()
 
 if __name__ == '__main__':
