@@ -14,4 +14,5 @@ ANTLR4="java -jar $ANTLR4_JAR_PATH"
 
 source get_antlr4.sh "$ANTLR4_VERSION"
 
-$ANTLR4 -Dlanguage=Python3 ieeeAnnex.g4
+$ANTLR4 -Dlanguage=Python3 bnfLexer.g4
+$ANTLR4 -Dlanguage=Python3 bnfParser.g4

@@ -1,0 +1,15 @@
+lexer grammar bnfLexer;
+IDENTIFIER : [a-zA-Z][a-zA-Z0-9_]* ;
+DOUBLE_COLON_EQUAL : '::=' ;
+VERTICAL_BAR : '|' ;
+LEFT_BRACKET : '[' ;
+RIGHT_BRACKET : ']' ;
+LEFT_BRACE : '{' ;
+RIGHT_BRACE : '}' ;
+STRING_START : '\'' -> channel(HIDDEN), mode(STRING_MODE) ;
+OTHER : . -> skip ;
+mode STRING_MODE;
+STRING_TEXT : ~['\\]+ ;
+STRING_ESCAPE : '\\' ('\'' | '\\') -> type(STRING_TEXT) ;
+STRING_END : '\'' -> channel(HIDDEN), mode(DEFAULT_MODE) ;
+STRING_OTHER : . -> skip ;

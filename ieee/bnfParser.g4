@@ -1,4 +1,5 @@
-grammar ieeeAnnex;
+parser grammar bnfParser;
+options { tokenVocab=bnfLexer; }
 formal_syntax : rule_definition* EOF ;
 rule_definition : rule_identifier '::=' rule_alternatives ;
 rule_alternatives : alternative (separator alternative)* ;
@@ -9,7 +10,4 @@ optional_item : '[' rule_alternatives ']' ;
 repeated_item : '{' rule_alternatives '}' ;
 rule_identifier : IDENTIFIER ;
 rule_reference : IDENTIFIER ;
-keyword_or_punctuation : STRING ;
-IDENTIFIER : [a-zA-Z][a-zA-Z0-9_]* ;
-STRING : '\'' ~[ \t\r\n]+ '\'' ;
-OTHER : . -> skip ;
+keyword_or_punctuation : STRING_TEXT ;

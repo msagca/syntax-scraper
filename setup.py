@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-	name='syntax_scraper',
+	name='syntax-scraper',
 	version='1.0.0',
 	author='Mustafa Said Ağca',
 	long_description_content_type='text/markdown',
@@ -11,8 +11,8 @@ setuptools.setup(
 		'License :: OSI Approved :: MIT License',
 		'Operating System :: OS Independent',
 	],
-	packages=['ieee1800'],
+	packages=['ieee'],
 	include_package_data=True,
 	install_requires=['antlr4-python3-runtime', 'pdfplumber'],
-	entry_points={'console_scripts': ['scrape-ieee1800=ieee1800.__main__:main']},
+	entry_points={'console_scripts': ['scrape-ieee=ieee.__main__:main']},
 )
