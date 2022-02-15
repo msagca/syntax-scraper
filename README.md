@@ -18,7 +18,7 @@ pip3 install .
 usage: scrape-ieee [-h] -n grammar_name -s start_page -e end_page [-f chapter_text] [-l chapter_text] [-t grammar_type] input_file
 
 positional arguments:
-  input_file       IEEE language standard (format: PDF)
+  input_file       IEEE language standard document (format: PDF)
 
 options:
   -h, --help       show this help message and exit
