@@ -4,11 +4,6 @@ Convert `Formal Syntax` section of an IEEE language standard document to an [ANT
 
 ## Installation
 
-First, generate the BNF parser
-```bash
-bash ieee/gen_parser.sh
-```
-Then, install the Python package
 ```bash
 python3 setup.py install --user
 ```
@@ -20,23 +15,25 @@ pip3 install .
 ## Usage
 
 ```bash
-usage: scrape-ieee [-h] -s start_page -e end_page -n grammar_name [-t grammar_type] input_file
+usage: scrape-ieee [-h] -n grammar_name -s start_page -e end_page [-f chapter_text] [-l chapter_text] [-t grammar_type] input_file
 
 positional arguments:
-  input_file       IEEE language standard document (format: PDF)
+  input_file       IEEE language standard (format: PDF)
 
 options:
   -h, --help       show this help message and exit
+  -n grammar_name  ANTLR4 grammar name
   -s start_page    formal syntax start page
   -e end_page      formal syntax end page
-  -n grammar_name  ANTLR4 grammar name
+  -f chapter_text  title (or number) of the first chapter (default: A.1 )
+  -l chapter_text  title (or number) of the last chapter (default: A.9.4)
   -t grammar_type  ANTLR4 grammar type (default: combined)
 ```
 
 ## Example
 
 ```bash
-scrape-ieee -s 1136 -e 1179 -n SystemVerilog -t split 1800-2017.pdf
+scrape-ieee -n SystemVerilog -s 1136 -e 1179 -f 'A.1 ' -l 'A.9.4' -t split 1800-2017.pdf
 ```
 
 The resulting grammar requires some extra work:
