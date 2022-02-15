@@ -33,7 +33,7 @@ def main():
 					reached_end = True
 					break
 				if reached_start:
-					if cc['fontname'] in ('BHDFJL+TimesNewRomanPSMT', 'LHFBMH+TimesNewRoman'):
+					if cc['fontname'] in ('BHDFJL+TimesNewRomanPSMT', 'LHFBMH+TimesNewRoman') or cc['text'].isspace():
 						if bold_text:
 							annex_text += '\'' + bold_text + '\''
 							bold_text = ''

@@ -39,7 +39,6 @@ options:
 scrape-ieee -s 1136 -e 1179 -n SystemVerilog -t split 1800-2017.pdf
 ```
 
-The tool has been tested on [IEEE Std 1800-2017](https://ieeexplore.ieee.org/document/8299595) and [IEEE Std 1364-2005](https://ieeexplore.ieee.org/document/1620780)  
 The resulting grammar requires some extra work:
 - Open the created `.g4` file(s) in [Visual Studio Code](https://code.visualstudio.com/)
 - Install the [ANTLR4 extension](https://marketplace.visualstudio.com/items?itemName=mike-lischke.vscode-antlr4)
