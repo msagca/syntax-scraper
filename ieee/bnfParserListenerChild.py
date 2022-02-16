@@ -17,7 +17,7 @@ class bnfParserListenerChild(bnfParserListener):
 		self.grammar_type = grammar_type
 		self.rule_tokens = []
 		self.alt_stack = []
-		self.parser_rules = {}
+		self.parser_rules = []
 		self.lexer_tokens = set()
 		self.parser_grammar = ''
 		self.lexer_grammar = ''
@@ -32,8 +32,8 @@ class bnfParserListenerChild(bnfParserListener):
 
 	def exitFormal_syntax(self, ctx:bnfParser.Formal_syntaxContext):
 		for rr in self.parser_rules:
-			self.parser_grammar += f'\n{rr}\n\t:'
-			for aa in self.parser_rules[rr]:
+			self.parser_grammar += f'\n{rr[0]}\n\t:'
+			for aa in rr[1]:
 				self.parser_grammar += aa
 			self.parser_grammar += '\n\t;\n'
 		if self.grammar_type == 'split':
@@ -55,7 +55,7 @@ class bnfParserListenerChild(bnfParserListener):
 
 	def exitRule_definition(self, ctx:bnfParser.Rule_definitionContext):
 		rule_name = ctx.rule_identifier().getText()
-		self.parser_rules[rule_name] = self.rule_tokens
+		self.parser_rules.append([rule_name, self.rule_tokens.copy()])
 		self.rule_tokens = []
 
 	def exitSeparator(self, ctx:bnfParser.SeparatorContext):
