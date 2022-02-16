@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from antlr4 import *
+import random
 if __name__ is not None and "." in __name__:
 	from .bnfParser import bnfParser
 	from .bnfParserListener import bnfParserListener
@@ -16,14 +17,11 @@ class bnfParserListenerChild(bnfParserListener):
 		self.grammar_type = grammar_type
 		self.rule_tokens = []
 		self.alt_stack = []
-		self.lexer_rule = True
 		self.parser_rules = {}
-		self.lexer_rules = {}
 		self.lexer_tokens = set()
-		self.lexer_rule_tokens = set()
 		self.parser_grammar = ''
 		self.lexer_grammar = ''
-		self.symbols = {'!':'EX', '"':'DQ', '#':'HA', '$':'DO', '%':'MO', '&':'AM', '\'':'AP', '(':'LP', ')':'RP', '*':'AS', '+':'PL', ',':'CO', '-':'MI', '.':'DT', '/':'SL', ':':'CL', ';':'SC', '<':'LT', '=':'EQ', '>':'GT', '?':'QU', '@':'AT', '[':'LB', '\\':'BS', ']':'RB', '^':'CA', '_':'UN', '`':'GR', '{':'LC', '|':'VE', '}':'RC', '~':'TI'}
+		self.symbols = {'0':'ZERO', '1':'ONE', '2':'TWO', '3':'THREE', '4':'FOUR', '5':'FIVE', '6':'SIX', '7':'SEVEN', '8':'EIGHT', '9':'NINE', '!':'EM', '"':'DQ', '#':'HA', '$':'DL', '%':'MO', '&':'AM', '\'':'AP', '(':'LP', ')':'RP', '*':'AS', '+':'PL', ',':'CO', '-':'MI', '.':'DT', '/':'SL', ':':'CL', ';':'SC', '<':'LT', '=':'EQ', '>':'GT', '?':'QM', '@':'AT', '[':'LB', '\\':'BS', ']':'RB', '^':'CA', '_':'UN', '`':'GA', '{':'LC', '|':'VL', '}':'RC', '~':'TI'}
 
 	def enterFormal_syntax(self, ctx:bnfParser.Formal_syntaxContext):
 		if self.grammar_type == 'split':
@@ -39,39 +37,26 @@ class bnfParserListenerChild(bnfParserListener):
 				self.parser_grammar += aa
 			self.parser_grammar += '\n\t;\n'
 		if self.grammar_type == 'split':
+			rule_names = set()
 			for tt in self.lexer_tokens:
 				rule_name = ''
-				for cc in tt:
-					if cc.isalpha() or cc == '_':
+				for ii, cc in enumerate(tt):
+					if cc.isalpha() or (ii != 0 and cc == '_'):
 						rule_name += cc.upper()
 					elif cc in self.symbols:
 						rule_name += self.symbols[cc]
-					else:
-						rule_name = ''
-						break
 				if rule_name:
+					while rule_name in rule_names:
+						rule_name += chr(random.randint(ord('A'), ord('Z')))
 					self.lexer_grammar += f'{rule_name} : \'{tt}\' ;\n'
-			for rr in self.lexer_rules:
-				self.lexer_grammar += f'\n{rr}\n\t:'
-				for aa in self.lexer_rules[rr]:
-					self.lexer_grammar += aa
-				self.lexer_grammar += '\n\t;\n'
+					rule_names.add(rule_name)
+				else:
+					print(f"Warning! Could not create a lexer rule for the token '{tt}'.")
 
 	def exitRule_definition(self, ctx:bnfParser.Rule_definitionContext):
 		rule_name = ctx.rule_identifier().getText()
-		if not self.lexer_rule:
-			self.lexer_tokens.update(self.lexer_rule_tokens)
-		self.lexer_rule_tokens = set()
-		if self.grammar_type == 'split' and self.lexer_rule:
-			self.parser_rules[rule_name] = [' ', rule_name.upper()]
-			self.lexer_rules[rule_name.upper()] = self.rule_tokens
-		else:
-			if self.lexer_rule:
-				self.parser_rules[rule_name] = [' ', rule_name.upper()]
-				rule_name = rule_name.upper()
-			self.parser_rules[rule_name] = self.rule_tokens
+		self.parser_rules[rule_name] = self.rule_tokens
 		self.rule_tokens = []
-		self.lexer_rule = True
 
 	def exitSeparator(self, ctx:bnfParser.SeparatorContext):
 		if not self.alt_stack:
@@ -114,11 +99,10 @@ class bnfParserListenerChild(bnfParserListener):
 	def enterRule_reference(self, ctx:bnfParser.Rule_referenceContext):
 		self.rule_tokens.append(' ')
 		self.rule_tokens.append(ctx.getText())
-		self.lexer_rule = False
 
 	def enterKeyword_or_punctuation(self, ctx:bnfParser.Keyword_or_punctuationContext):
 		self.rule_tokens.append(' ')
 		self.rule_tokens.append('\'')
 		self.rule_tokens.append(ctx.getText())
 		self.rule_tokens.append('\'')
-		self.lexer_rule_tokens.add(ctx.getText())
+		self.lexer_tokens.add(ctx.getText())

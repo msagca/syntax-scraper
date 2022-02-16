@@ -32,8 +32,8 @@ def main():
 	reached_end = False
 	break_next = False
 	with pdfplumber.open(args.input_file) as pdf:
-		for nn in range(args.s, args.e+1):
-			page = pdf.pages[nn]
+		for pp in range(args.s, args.e+1):
+			page = pdf.pages[pp]
 			for cc in page.chars:
 				cc_text = cc['text']
 				cc_font = cc['fontname']
@@ -92,7 +92,7 @@ def main():
 			fp.write(listener_obj.parser_grammar)
 			fp.close()
 	else:
-		print(f'Error! Could not find the chapter \'{args.f}\'.')
+		print(f"Error! Could not find the chapter '{args.f}'.")
 		sys.exit()
 
 if __name__ == '__main__':
