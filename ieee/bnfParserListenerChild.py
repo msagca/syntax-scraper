@@ -40,11 +40,12 @@ class bnfParserListenerChild(bnfParserListener):
 			rule_names = set()
 			for tt in self.lexer_tokens:
 				rule_name = ''
-				for ii, cc in enumerate(tt):
-					if cc.isalpha() or (ii != 0 and cc == '_'):
-						rule_name += cc.upper()
-					elif cc in self.symbols:
-						rule_name += self.symbols[cc]
+				if len(tt) > 1 or not tt.isalnum():
+					for ii, cc in enumerate(tt):
+						if cc.isalpha() or (ii != 0 and cc == '_'):
+							rule_name += cc.upper()
+						elif cc in self.symbols:
+							rule_name += self.symbols[cc]
 				if rule_name:
 					while rule_name in rule_names:
 						rule_name += chr(random.randint(ord('A'), ord('Z')))
