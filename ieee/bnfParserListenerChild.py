@@ -38,7 +38,7 @@ class bnfParserListenerChild(bnfParserListener):
 			self.parser_grammar += '\n\t;\n'
 		if self.grammar_type == 'split':
 			rule_names = set()
-			for tt in self.lexer_tokens:
+			for tt in sorted(self.lexer_tokens):
 				rule_name = ''
 				if len(tt) > 1 or not tt.isalnum():
 					for ii, cc in enumerate(tt):
