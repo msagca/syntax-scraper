@@ -1,8 +1,8 @@
 parser grammar bnfParser;
-options { tokenVocab=bnfLexer; }
-formal_syntax : rule_definition* EOF ;
+options { tokenVocab = bnfLexer; }
+formal_syntax : ( rule_definition | ~'::=' )*? EOF ;
 rule_definition : rule_identifier '::=' rule_alternatives ;
-rule_alternatives : alternative (separator alternative)* ;
+rule_alternatives : alternative ( separator alternative )* ;
 separator : '|' ;
 alternative : item+ ;
 item : rule_reference | keyword_or_punctuation | optional_item | repeated_item ;

@@ -1,5 +1,6 @@
 lexer grammar bnfLexer;
-IDENTIFIER : [a-zA-Z][a-zA-Z0-9_]* ;
+IDENTIFIER : [a-z] [a-z0-9_]* ;
+CAPITALIZED_WORD : [A-Z] ~[ \t\r\n]* ;
 DOUBLE_COLON_EQUAL : '::=' ;
 VERTICAL_BAR : '|' ;
 LEFT_BRACKET : '[' ;
@@ -10,6 +11,6 @@ APOSTROPHE : '\'' -> channel(HIDDEN), mode(STRING_MODE) ;
 OTHER : . -> skip ;
 mode STRING_MODE;
 STRING_TEXT : ~['\\]+ ;
-STRING_ESCAPE : '\\' ('\'' | '\\') -> type(STRING_TEXT) ;
+STRING_ESC_SEQ : '\\' ('\'' | '\\') -> type(STRING_TEXT) ;
 STRING_APOSTROPHE : '\'' -> channel(HIDDEN), mode(DEFAULT_MODE) ;
 STRING_OTHER : . -> skip ;

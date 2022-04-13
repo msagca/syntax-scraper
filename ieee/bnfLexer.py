@@ -1,4 +1,4 @@
-# Generated from bnfLexer.g4 by ANTLR 4.9.3
+# Generated from bnfLexer.g4 by ANTLR 4.10
 from antlr4 import *
 from io import StringIO
 import sys
@@ -8,38 +8,38 @@ else:
     from typing.io import TextIO
 
 
-
 def serializedATN():
-    with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2\16")
-        buf.write("O\b\1\b\1\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7")
-        buf.write("\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r")
-        buf.write("\4\16\t\16\3\2\3\2\7\2!\n\2\f\2\16\2$\13\2\3\3\3\3\3\3")
-        buf.write("\3\3\3\4\3\4\3\5\3\5\3\6\3\6\3\7\3\7\3\b\3\b\3\t\3\t\3")
-        buf.write("\t\3\t\3\t\3\n\3\n\3\n\3\n\3\13\6\13>\n\13\r\13\16\13")
-        buf.write("?\3\f\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\16\3\16\3")
-        buf.write("\16\3\16\2\2\17\4\3\6\4\b\5\n\6\f\7\16\b\20\t\22\n\24")
-        buf.write("\13\26\f\30\2\32\r\34\16\4\2\3\5\4\2C\\c|\6\2\62;C\\a")
-        buf.write("ac|\4\2))^^\2O\2\4\3\2\2\2\2\6\3\2\2\2\2\b\3\2\2\2\2\n")
-        buf.write("\3\2\2\2\2\f\3\2\2\2\2\16\3\2\2\2\2\20\3\2\2\2\2\22\3")
-        buf.write("\2\2\2\2\24\3\2\2\2\3\26\3\2\2\2\3\30\3\2\2\2\3\32\3\2")
-        buf.write("\2\2\3\34\3\2\2\2\4\36\3\2\2\2\6%\3\2\2\2\b)\3\2\2\2\n")
-        buf.write("+\3\2\2\2\f-\3\2\2\2\16/\3\2\2\2\20\61\3\2\2\2\22\63\3")
-        buf.write("\2\2\2\248\3\2\2\2\26=\3\2\2\2\30A\3\2\2\2\32F\3\2\2\2")
-        buf.write("\34K\3\2\2\2\36\"\t\2\2\2\37!\t\3\2\2 \37\3\2\2\2!$\3")
-        buf.write("\2\2\2\" \3\2\2\2\"#\3\2\2\2#\5\3\2\2\2$\"\3\2\2\2%&\7")
-        buf.write("<\2\2&\'\7<\2\2\'(\7?\2\2(\7\3\2\2\2)*\7~\2\2*\t\3\2\2")
-        buf.write("\2+,\7]\2\2,\13\3\2\2\2-.\7_\2\2.\r\3\2\2\2/\60\7}\2\2")
-        buf.write("\60\17\3\2\2\2\61\62\7\177\2\2\62\21\3\2\2\2\63\64\7)")
-        buf.write("\2\2\64\65\3\2\2\2\65\66\b\t\2\2\66\67\b\t\3\2\67\23\3")
-        buf.write("\2\2\289\13\2\2\29:\3\2\2\2:;\b\n\4\2;\25\3\2\2\2<>\n")
-        buf.write("\4\2\2=<\3\2\2\2>?\3\2\2\2?=\3\2\2\2?@\3\2\2\2@\27\3\2")
-        buf.write("\2\2AB\7^\2\2BC\t\4\2\2CD\3\2\2\2DE\b\f\5\2E\31\3\2\2")
-        buf.write("\2FG\7)\2\2GH\3\2\2\2HI\b\r\2\2IJ\b\r\6\2J\33\3\2\2\2")
-        buf.write("KL\13\2\2\2LM\3\2\2\2MN\b\16\4\2N\35\3\2\2\2\6\2\3\"?")
-        buf.write("\7\2\3\2\4\3\2\b\2\2\t\f\2\4\2\2")
-        return buf.getvalue()
-
+    return [
+        4,0,13,86,6,-1,6,-1,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,
+        7,5,2,6,7,6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,
+        2,13,7,13,1,0,1,0,5,0,33,8,0,10,0,12,0,36,9,0,1,1,1,1,5,1,40,8,1,
+        10,1,12,1,43,9,1,1,2,1,2,1,2,1,2,1,3,1,3,1,4,1,4,1,5,1,5,1,6,1,6,
+        1,7,1,7,1,8,1,8,1,8,1,8,1,8,1,9,1,9,1,9,1,9,1,10,4,10,69,8,10,11,
+        10,12,10,70,1,11,1,11,1,11,1,11,1,11,1,12,1,12,1,12,1,12,1,12,1,
+        13,1,13,1,13,1,13,0,0,14,2,1,4,2,6,3,8,4,10,5,12,6,14,7,16,8,18,
+        9,20,10,22,11,24,0,26,12,28,13,2,0,1,5,1,0,97,122,3,0,48,57,95,95,
+        97,122,1,0,65,90,3,0,9,10,13,13,32,32,2,0,39,39,92,92,87,0,2,1,0,
+        0,0,0,4,1,0,0,0,0,6,1,0,0,0,0,8,1,0,0,0,0,10,1,0,0,0,0,12,1,0,0,
+        0,0,14,1,0,0,0,0,16,1,0,0,0,0,18,1,0,0,0,0,20,1,0,0,0,1,22,1,0,0,
+        0,1,24,1,0,0,0,1,26,1,0,0,0,1,28,1,0,0,0,2,30,1,0,0,0,4,37,1,0,0,
+        0,6,44,1,0,0,0,8,48,1,0,0,0,10,50,1,0,0,0,12,52,1,0,0,0,14,54,1,
+        0,0,0,16,56,1,0,0,0,18,58,1,0,0,0,20,63,1,0,0,0,22,68,1,0,0,0,24,
+        72,1,0,0,0,26,77,1,0,0,0,28,82,1,0,0,0,30,34,7,0,0,0,31,33,7,1,0,
+        0,32,31,1,0,0,0,33,36,1,0,0,0,34,32,1,0,0,0,34,35,1,0,0,0,35,3,1,
+        0,0,0,36,34,1,0,0,0,37,41,7,2,0,0,38,40,8,3,0,0,39,38,1,0,0,0,40,
+        43,1,0,0,0,41,39,1,0,0,0,41,42,1,0,0,0,42,5,1,0,0,0,43,41,1,0,0,
+        0,44,45,5,58,0,0,45,46,5,58,0,0,46,47,5,61,0,0,47,7,1,0,0,0,48,49,
+        5,124,0,0,49,9,1,0,0,0,50,51,5,91,0,0,51,11,1,0,0,0,52,53,5,93,0,
+        0,53,13,1,0,0,0,54,55,5,123,0,0,55,15,1,0,0,0,56,57,5,125,0,0,57,
+        17,1,0,0,0,58,59,5,39,0,0,59,60,1,0,0,0,60,61,6,8,0,0,61,62,6,8,
+        1,0,62,19,1,0,0,0,63,64,9,0,0,0,64,65,1,0,0,0,65,66,6,9,2,0,66,21,
+        1,0,0,0,67,69,8,4,0,0,68,67,1,0,0,0,69,70,1,0,0,0,70,68,1,0,0,0,
+        70,71,1,0,0,0,71,23,1,0,0,0,72,73,5,92,0,0,73,74,7,4,0,0,74,75,1,
+        0,0,0,75,76,6,11,3,0,76,25,1,0,0,0,77,78,5,39,0,0,78,79,1,0,0,0,
+        79,80,6,12,0,0,80,81,6,12,4,0,81,27,1,0,0,0,82,83,9,0,0,0,83,84,
+        1,0,0,0,84,85,6,13,2,0,85,29,1,0,0,0,5,0,1,34,41,70,5,0,1,0,2,1,
+        0,6,0,0,7,11,0,2,0,0
+    ]
 
 class bnfLexer(Lexer):
 
@@ -50,17 +50,18 @@ class bnfLexer(Lexer):
     STRING_MODE = 1
 
     IDENTIFIER = 1
-    DOUBLE_COLON_EQUAL = 2
-    VERTICAL_BAR = 3
-    LEFT_BRACKET = 4
-    RIGHT_BRACKET = 5
-    LEFT_BRACE = 6
-    RIGHT_BRACE = 7
-    APOSTROPHE = 8
-    OTHER = 9
-    STRING_TEXT = 10
-    STRING_APOSTROPHE = 11
-    STRING_OTHER = 12
+    CAPITALIZED_WORD = 2
+    DOUBLE_COLON_EQUAL = 3
+    VERTICAL_BAR = 4
+    LEFT_BRACKET = 5
+    RIGHT_BRACKET = 6
+    LEFT_BRACE = 7
+    RIGHT_BRACE = 8
+    APOSTROPHE = 9
+    OTHER = 10
+    STRING_TEXT = 11
+    STRING_APOSTROPHE = 12
+    STRING_OTHER = 13
 
     channelNames = [ u"DEFAULT_TOKEN_CHANNEL", u"HIDDEN" ]
 
@@ -70,20 +71,20 @@ class bnfLexer(Lexer):
             "'::='", "'|'", "'['", "']'", "'{'", "'}'" ]
 
     symbolicNames = [ "<INVALID>",
-            "IDENTIFIER", "DOUBLE_COLON_EQUAL", "VERTICAL_BAR", "LEFT_BRACKET", 
-            "RIGHT_BRACKET", "LEFT_BRACE", "RIGHT_BRACE", "APOSTROPHE", 
-            "OTHER", "STRING_TEXT", "STRING_APOSTROPHE", "STRING_OTHER" ]
+            "IDENTIFIER", "CAPITALIZED_WORD", "DOUBLE_COLON_EQUAL", "VERTICAL_BAR", 
+            "LEFT_BRACKET", "RIGHT_BRACKET", "LEFT_BRACE", "RIGHT_BRACE", 
+            "APOSTROPHE", "OTHER", "STRING_TEXT", "STRING_APOSTROPHE", "STRING_OTHER" ]
 
-    ruleNames = [ "IDENTIFIER", "DOUBLE_COLON_EQUAL", "VERTICAL_BAR", "LEFT_BRACKET", 
-                  "RIGHT_BRACKET", "LEFT_BRACE", "RIGHT_BRACE", "APOSTROPHE", 
-                  "OTHER", "STRING_TEXT", "STRING_ESCAPE", "STRING_APOSTROPHE", 
-                  "STRING_OTHER" ]
+    ruleNames = [ "IDENTIFIER", "CAPITALIZED_WORD", "DOUBLE_COLON_EQUAL", 
+                  "VERTICAL_BAR", "LEFT_BRACKET", "RIGHT_BRACKET", "LEFT_BRACE", 
+                  "RIGHT_BRACE", "APOSTROPHE", "OTHER", "STRING_TEXT", "STRING_ESC_SEQ", 
+                  "STRING_APOSTROPHE", "STRING_OTHER" ]
 
     grammarFileName = "bnfLexer.g4"
 
     def __init__(self, input=None, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.9.3")
+        self.checkVersion("4.10")
         self._interp = LexerATNSimulator(self, self.atn, self.decisionsToDFA, PredictionContextCache())
         self._actions = None
         self._predicates = None
