@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from antlr4 import *
-import random
 if __name__ is not None and "." in __name__:
 	from .bnfParser import bnfParser
 	from .bnfParserListener import bnfParserListener
@@ -23,10 +22,10 @@ class bnfParserListenerChild(bnfParserListener):
 		self.grammar_text += f'grammar {self.grammar_name};\n'
 
 	def exitFormal_syntax(self, ctx:bnfParser.Formal_syntaxContext):
-		for rr in self.grammar_rules:
-			self.grammar_text += f'\n{rr}\n\t:'
-			for ra in self.grammar_rules[rr]:
-				self.grammar_text += ra
+		for rule in self.grammar_rules:
+			self.grammar_text += f'\n{rule}\n\t:'
+			for token in self.grammar_rules[rule]:
+				self.grammar_text += token
 			self.grammar_text += '\n\t;\n'
 
 	def exitRule_definition(self, ctx:bnfParser.Rule_definitionContext):

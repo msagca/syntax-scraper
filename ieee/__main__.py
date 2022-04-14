@@ -21,8 +21,8 @@ def main():
 	arg_parser.add_argument('-e', type=int, metavar='end_page', help='formal syntax end page (default: last page)')
 	args = arg_parser.parse_args()
 	syntax_text = ''
-	bold_text = ''
 	with pdfplumber.open(args.input_file) as pdf:
+		bold_text = ''
 		start_page = args.s if args.s else 1
 		end_page = args.e if args.e else len(pdf.pages)
 		for pp in range(start_page, end_page):
@@ -30,34 +30,29 @@ def main():
 			for char in page.chars:
 				char_text = char['text']
 				char_font = char['fontname'].lower()
-				if 'bold' in char_font:
-					if not char_text.isspace():
-						if bold_text in ('[', ']', '(', ')', '{', '}') or char_text in ('[', ']', '(', ')', '{', '}'):
-							if bold_text:
-								syntax_text += '\'' + bold_text + '\''
-								bold_text = ''
-						if char_text in ('\'', '\\'):
-							bold_text += '\\'
-						bold_text += char_text
-					else:
-						if bold_text:
-							syntax_text += '\'' + bold_text + '\''
-							bold_text = ''
-						syntax_text += char_text
-				else:
+				if char_text.isspace() or 'bold' not in char_font:
 					if bold_text:
 						syntax_text += '\'' + bold_text + '\''
 						bold_text = ''
 					syntax_text += char_text
+				elif char_text in ('[', ']', '(', ')', '{', '}'):
+					if bold_text:
+						syntax_text += '\'' + bold_text + '\''
+						bold_text = ''
+					syntax_text += '\'' + char_text + '\''
+				else:
+					if char_text in ('\'', '\\'):
+						bold_text += '\\'
+					bold_text += char_text
 	input_stream = antlr4.InputStream(syntax_text)
 	lexer = bnfLexer(input_stream)
 	token_stream = antlr4.CommonTokenStream(lexer)
 	parser = bnfParser(token_stream)
 	tree = parser.formal_syntax()
-	listener = bnfParserListenerChild(grammar_name=args.n)
+	listener = bnfParserListenerChild(args.n)
 	walker = antlr4.ParseTreeWalker();
 	walker.walk(listener, tree)
-	with open(f'{args.n}.g4', 'w') as fp:
+	with open(f'{listener.grammar_name}.g4', 'w') as fp:
 		fp.write(listener.grammar_text)
 
 if __name__ == '__main__':
