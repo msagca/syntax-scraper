@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
 	name='syntax-scraper',
-	version='1.0.0',
+	version='1.0.1',
 	author='Mustafa Said Ağca',
 	url='https://github.com/msagca/syntax-scraper',
 	classifiers=[

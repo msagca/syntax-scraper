@@ -3,15 +3,14 @@
 import antlr4
 import argparse
 import pdfplumber
-import sys
 if __name__ is not None and "." in __name__:
 	from .bnfLexer import bnfLexer
 	from .bnfParser import bnfParser
-	from .bnfParserListenerChild import bnfParserListenerChild
+	from .Scraper import Scraper
 else:
 	from bnfLexer import bnfLexer
 	from bnfParser import bnfParser
-	from bnfParserListenerChild import bnfParserListenerChild
+	from Scraper import Scraper
 
 def main():
 	arg_parser = argparse.ArgumentParser()
@@ -32,16 +31,18 @@ def main():
 				char_font = char['fontname'].lower()
 				if char_text.isspace() or 'bold' not in char_font:
 					if bold_text:
-						syntax_text += '\'' + bold_text + '\''
+						syntax_text += "'" + bold_text + "'"
 						bold_text = ''
+					if char_text in ("'", '\\'):
+						char_text = "'\\" + char_text + "'"
 					syntax_text += char_text
 				elif char_text in ('[', ']', '(', ')', '{', '}'):
 					if bold_text:
-						syntax_text += '\'' + bold_text + '\''
+						syntax_text += "'" + bold_text + "'"
 						bold_text = ''
-					syntax_text += '\'' + char_text + '\''
+					syntax_text += "'" + char_text + "'"
 				else:
-					if char_text in ('\'', '\\'):
+					if char_text in ("'", '\\'):
 						bold_text += '\\'
 					bold_text += char_text
 	input_stream = antlr4.InputStream(syntax_text)
@@ -49,11 +50,11 @@ def main():
 	token_stream = antlr4.CommonTokenStream(lexer)
 	parser = bnfParser(token_stream)
 	tree = parser.formal_syntax()
-	listener = bnfParserListenerChild(args.n)
-	walker = antlr4.ParseTreeWalker();
-	walker.walk(listener, tree)
-	with open(f'{listener.grammar_name}.g4', 'w') as fp:
-		fp.write(listener.grammar_text)
+	visitor = Scraper()
+	grammar_text = f'grammar {args.n};'
+	grammar_text += visitor.visit(tree)
+	with open(f'{args.n}.g4', 'w') as fp:
+		fp.write(grammar_text)
 
 if __name__ == '__main__':
 	main()
