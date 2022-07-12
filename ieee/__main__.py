@@ -14,7 +14,7 @@ else:
 
 def main():
 	arg_parser = argparse.ArgumentParser()
-	arg_parser.add_argument('input_file', help='IEEE language standard (format: PDF)')
+	arg_parser.add_argument('input_file', help='IEEE language standard document (format: PDF)')
 	arg_parser.add_argument('-n', required=True, metavar='grammar_name', help='ANTLR4 grammar name')
 	arg_parser.add_argument('-s', type=int, metavar='start_page', help='formal syntax start page (default: first page)')
 	arg_parser.add_argument('-e', type=int, metavar='end_page', help='formal syntax end page (default: last page)')
@@ -29,21 +29,18 @@ def main():
 			for char in page.chars:
 				char_text = char['text']
 				char_font = char['fontname'].lower()
-				if char_text.isspace() or 'bold' not in char_font:
+				if char_text == '\\':
+					char_text = '\\' + char_text
+				elif char_text == "'":
+					char_text = '\\' + char_text
+					if 'bold' not in char_font:
+						char_text = "'" + char_text + "'"
+				if char_text.isspace() or char_text == '§' or 'bold' not in char_font:
 					if bold_text:
 						syntax_text += "'" + bold_text + "'"
 						bold_text = ''
-					if char_text in ("'", '\\'):
-						char_text = "'\\" + char_text + "'"
 					syntax_text += char_text
-				elif char_text in ('[', ']', '(', ')', '{', '}'):
-					if bold_text:
-						syntax_text += "'" + bold_text + "'"
-						bold_text = ''
-					syntax_text += "'" + char_text + "'"
 				else:
-					if char_text in ("'", '\\'):
-						bold_text += '\\'
 					bold_text += char_text
 	input_stream = antlr4.InputStream(syntax_text)
 	lexer = bnfLexer(input_stream)
