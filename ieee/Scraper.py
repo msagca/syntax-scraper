@@ -87,4 +87,4 @@ class Scraper(bnfParserVisitor):
 		return self.visitChildren(ctx)
 
 	def visitKeyword_or_punctuation(self, ctx:bnfParser.Keyword_or_punctuationContext):
-		return '\'' + self.visitChildren(ctx) + '\''
+		return "'" + self.visitChildren(ctx) + "'"

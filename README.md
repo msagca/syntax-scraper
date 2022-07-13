@@ -33,9 +33,11 @@ options:
 scrape-ieee -n SystemVerilog -s 1136 -e 1180 1800-2017.pdf
 ```
 
-The resulting grammar requires some extra work:
+The resulting grammar requires some additional work:
 - Open the created *.g4* file in [Visual Studio Code](https://code.visualstudio.com/).
 - Install the [ANTLR4 extension](https://marketplace.visualstudio.com/items?itemName=mike-lischke.vscode-antlr4).
-- Manually fix the highlighted issues.
-- Find every occurance of *'Failed to parse!'* and manually write those rules.
-- Remove title text, *e.g. 'A.8.7' 'Numbers'*, from the rules.
+- Fix the highlighted issues.
+- Find every occurance of `'Failed to parse!'` and manually write those rules.
+- Remove title text, e.g. `'A.8.7' 'Numbers'`, from the rules.
+- Append `EOF` to the start rule(s): `library_text` and `source_text`.
+- Identify the [lexer rules](https://github.com/antlr/antlr4/blob/master/doc/lexer-rules.md) (identifier, number, whitespace, etc.) and rewrite them.

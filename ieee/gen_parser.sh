@@ -6,7 +6,7 @@ ANTLR4_PATH=/usr/local/lib/$ANTLR4_JAR
 ANTLR4="java -jar $ANTLR4_PATH"
 
 if [ ! -f "$ANTLR4_PATH" ]; then
-	(cd /usr/local/lib && sudo curl -LO https://www.antlr.org/download/"$ANTLR4_JAR")
+	sudo curl -L https://www.antlr.org/download/"$ANTLR4_JAR" -o /usr/local/lib
 fi
 
 cd "$(dirname "$0")"
