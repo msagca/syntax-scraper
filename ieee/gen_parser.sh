@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-ANTLR4_VERSION='4.11.1'
+ANTLR4_VERSION='4.12.0'
 ANTLR4_JAR=antlr-$ANTLR4_VERSION-complete.jar
 ANTLR4_PATH=$HOME/.local/bin/$ANTLR4_JAR
 ANTLR4="java -jar $ANTLR4_PATH"

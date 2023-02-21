@@ -13,6 +13,6 @@ setuptools.setup(
 		'Operating System :: OS Independent',
 	],
 	packages=['ieee'],
-	install_requires=['antlr4-python3-runtime==4.11.1', 'pdfplumber'],
+	install_requires=['antlr4-python3-runtime==4.12.0', 'pdfplumber'],
 	entry_points={'console_scripts': ['scrape-ieee=ieee.__main__:main']},
 )
