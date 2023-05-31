@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-if __name__ is not None and '.' in __name__:
+if __name__ is not None and "." in __name__:
     from .bnfParser import bnfParser
     from .bnfParserVisitor import bnfParserVisitor
 else:
@@ -9,7 +9,6 @@ else:
 
 
 class Scraper(bnfParserVisitor):
-
     def __init__(self):
         super().__init__()
         self.hier_level = 0
@@ -19,11 +18,11 @@ class Scraper(bnfParserVisitor):
         return tree.accept(self)
 
     def visitChildren(self, node):
-        text = ''
+        text = ""
         n = node.getChildCount()
         for i in range(n):
             if i > 0:
-                text += ' '
+                text += " "
             c = node.getChild(i)
             result = c.accept(self)
             if result == None:
@@ -37,11 +36,52 @@ class Scraper(bnfParserVisitor):
         return node.getText()
 
     def getLexerRules(self):
-        char_names = {'0': 'ZERO', '1': 'ONE', '2': 'TWO', '3': 'THREE', '4': 'FOUR', '5': 'FIVE', '6': 'SIX', '7': 'SEVEN', '8': 'EIGHT', '9': 'NINE', '!': 'EM', '"': 'DQ', '#': 'HA', '$': 'DL', '%': 'MO', '&': 'AM', '\\': 'BS', '\'': 'AP',
-                      '(': 'LP', ')': 'RP', '*': 'AS', '+': 'PL', ',': 'CO', '-': 'MI', '.': 'DT', '/': 'SL', ':': 'CL', ';': 'SC', '<': 'LT', '=': 'EQ', '>': 'GT', '?': 'QM', '@': 'AT', '[': 'LB', ']': 'RB', '^': 'CA', '`': 'GA', '{': 'LC', '|': 'VL', '}': 'RC', '~': 'TI'}
-        text = ''
+        char_names = {
+            '"': "DQ",
+            "-": "MI",
+            ",": "CO",
+            ";": "SC",
+            ":": "CL",
+            "!": "EM",
+            "?": "QM",
+            ".": "DT",
+            "'": "AP",
+            "(": "LP",
+            ")": "RP",
+            "[": "LB",
+            "]": "RB",
+            "{": "LC",
+            "}": "RC",
+            "@": "AT",
+            "*": "AS",
+            "/": "SL",
+            "\\": "BS",
+            "&": "AM",
+            "#": "HA",
+            "%": "MO",
+            "`": "GA",
+            "^": "CA",
+            "+": "PL",
+            "<": "LT",
+            "=": "EQ",
+            ">": "GT",
+            "|": "VL",
+            "~": "TI",
+            "$": "DL",
+            "0": "ZERO",
+            "1": "ONE",
+            "2": "TWO",
+            "3": "THREE",
+            "4": "FOUR",
+            "5": "FIVE",
+            "6": "SIX",
+            "7": "SEVEN",
+            "8": "EIGHT",
+            "9": "NINE",
+        }
+        text = ""
         for token in sorted(self.tokens):
-            rule_name = ''
+            rule_name = ""
             for char in token:
                 if char in char_names:
                     rule_name += char_names[char]
@@ -52,20 +92,20 @@ class Scraper(bnfParserVisitor):
         return text
 
     def visitFormal_syntax(self, ctx: bnfParser.Formal_syntaxContext):
-        text = ''
+        text = ""
         for rule in ctx.rule_definition():
-            text += f'\n{self.visit(rule)}'
+            text += f"\n{self.visit(rule)}"
         return text
 
     def visitRule_definition(self, ctx: bnfParser.Rule_definitionContext):
-        return f'{self.visit(ctx.rule_identifier())}\n\t: {self.visit(ctx.rule_alternatives())}\n\t;'
+        return f"{self.visit(ctx.rule_identifier())}\n\t: {self.visit(ctx.rule_alternatives())}\n\t;"
 
     def visitRule_alternatives(self, ctx: bnfParser.Rule_alternativesContext):
         if self.hier_level == 0:
-            text = ''
+            text = ""
             for i, alt in enumerate(ctx.alternative()):
                 if i > 0:
-                    text += '\n\t| '
+                    text += "\n\t| "
                 text += self.visit(alt)
             return text
         else:
@@ -82,8 +122,8 @@ class Scraper(bnfParserVisitor):
         text = self.visit(ctx.rule_alternatives())
         left_index, right_index = ctx.getSourceInterval()
         if right_index - left_index > 2:
-            text = f'( {text} )'
-        text += '?'
+            text = f"( {text} )"
+        text += "?"
         self.hier_level -= 1
         return text
 
@@ -92,8 +132,8 @@ class Scraper(bnfParserVisitor):
         text = self.visit(ctx.rule_alternatives())
         left_index, right_index = ctx.getSourceInterval()
         if right_index - left_index > 2:
-            text = f'( {text} )'
-        text += '*'
+            text = f"( {text} )"
+        text += "*"
         self.hier_level -= 1
         return text
 
